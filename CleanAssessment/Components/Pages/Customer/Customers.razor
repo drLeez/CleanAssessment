@@ -1,0 +1,29 @@
+﻿@page "/customer"
+@using CleanAssessment.Helpers
+@using CleanAssessment.Managers.Customer
+@inject IKeyboardHelper _keyboardHelper
+@inject IJSRuntime _jsRuntime
+@inject ICustomerManager _customerManager
+
+<h3>Customers</h3>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Refresh">Refresh</MudButton>
+
+@code {
+    protected override void OnInitialized()
+    {
+        _keyboardHelper.OnKeyDown = OnKeyDown;
+    }
+
+    private async Task OnKeyDown(string key)
+    {
+        if (key == " ")
+        {
+            await _jsRuntime.InvokeVoidAsync("Print", "WORKED!!!!!!!");
+        }
+    }
+    private async Task Refresh()
+    {
+        var response = await _customerManager.GetAllAsync(null, null, "bob", null);
+    }
+}

@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@inherits MudNavLink
+
+<MudStack Row Spacing="0">
+    @((RenderTreeBuilder builder) => base.BuildRenderTree(builder))
+    <MudSpacer />
+    <div class="fav-link" onclick="@(async () => await ToggleFav())">
+        <MudIcon Icon="@(IsFavorited ? @Icons.Material.Filled.Star : @Icons.Material.Filled.StarBorder)"
+                 Style="margin: auto"
+                 Color="Color.Warning"
+                 Size="Size.Small"/>
+    </div>
+</MudStack>
+
+@code {
+    [Parameter]
+    public bool IsFavorited { get; set; } = false;
+
+    private async Task ToggleFav()
+    {
+        IsFavorited = !IsFavorited;
+        await WriteFavsToCookie();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
+        if (!first) return;
+        await base.OnAfterRenderAsync(first);
+        Links.Add(this);
+    }
+
+    public static readonly HashSet<FavNavLink> Links = new();
+    public static IEnumerable<FavNavLink> Favorites => Links.Where(x => x.IsFavorited);
+    private async Task ReadFavsFromCookie()
+    {
+
+    }
+    private async Task WriteFavsToCookie()
+    {
+
+    }
+}
