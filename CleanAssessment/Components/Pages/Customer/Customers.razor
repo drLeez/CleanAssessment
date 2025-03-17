@@ -6,6 +6,7 @@
 @inject IJSRuntime _jsRuntime
 @inject ICustomerManager _customerManager
 @inject ISnackBarHelper _snackBarHelper
+@inject IDialogService _dialogService
 
 <MudText Typo="Typo.h4" Color="Color.Primary">Customers</MudText>
 
@@ -22,6 +23,7 @@
     RowsPerPage="100"
     Height="calc(100vh - 220px)"
     LoadingProgressColor="Color.Primary"
+    RowClassFunc="RowClassFunc"
     Loading="@_loading"
 >
     <ToolBarContent>
@@ -34,6 +36,9 @@
                                 />
             <MudDivider Vertical="true" FlexItem="true" />
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Refresh" EndIcon="@Icons.Material.Filled.Refresh">Refresh</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="InvokeAddModal" EndIcon="@Icons.Material.Filled.Add">Add</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick="InvokeEditModal" EndIcon="@Icons.Material.Filled.Edit" Disabled="NoItemSelected()">Edit</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="InvokeDeleteModal" EndIcon="@Icons.Material.Filled.Delete" Disabled="NoItemSelected()">Delete</MudButton>
         </MudStack>
     </ToolBarContent>
     <ColGroup>

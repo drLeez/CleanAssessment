@@ -1,4 +1,5 @@
-﻿using CleanAssessment.Domain.Features.Customer;
+﻿using CleanAssessment.Components.Layout;
+using CleanAssessment.Domain.Features.Customer;
 using MudBlazor;
 
 namespace CleanAssessment.Components.Pages.Customer
@@ -14,9 +15,19 @@ namespace CleanAssessment.Components.Pages.Customer
         private bool _useDateFilter { get; set; } = false;
         private DateRange? _dateRangeFilter { get; set; }
 
-        protected override void OnInitialized()
+        protected override async Task OnAfterRenderAsync(bool first)
         {
-            
+            if (!first) return;
+            await Refresh();
+        }
+
+        private bool NoItemSelected()
+        {
+            return _grid.SelectedItem == null;
+        }
+        private string RowClassFunc(CustomerResponse item, int rowIndex)
+        {
+            return item == _grid.SelectedItem ? $"selected" : string.Empty;
         }
 
         private async Task Refresh()
@@ -33,8 +44,39 @@ namespace CleanAssessment.Components.Pages.Customer
             {
                 _snackBarHelper.Add(response.Messages, Severity.Error);
             }
+            await _grid.SetSelectedItemAsync(null);
             _loading = false;
             StateHasChanged();
+        }
+        private async Task InvokeAddModal()
+        {
+
+        }
+        private async Task InvokeEditModal()
+        {
+
+        }
+        private async Task InvokeDeleteModal()
+        {
+            var current = _grid.SelectedItem;
+            var dialog = await ConfirmModal.Dialog(_dialogService, "Delete Customer", $"Are you sure you want to delete {current.FullName} ?", "Delete"
+                , icon: Icons.Material.Filled.Delete
+                , buttonColor: Color.Error
+                );
+            var result = await dialog.Result;
+            if (!result.Canceled)
+            {
+                var response = await _customerManager.DeleteAsync(current);
+                if (response.Succeeded)
+                {
+                    _snackBarHelper.Add($"Customer deleted", Severity.Success);
+                }
+                else
+                {
+                    _snackBarHelper.Add(response.Messages, Severity.Error);
+                }
+                await Refresh();
+            }
         }
     }
 }

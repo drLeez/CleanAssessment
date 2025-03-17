@@ -1,6 +1,8 @@
 ﻿using CleanAssessment.Domain.Features.Customer.Queries;
 using Microsoft.AspNetCore.Mvc;
 using CleanAssessment.Shared.Extensions;
+using CleanAssessment.Domain.Features.Customer;
+using CleanAssessment.Domain.Features.Customer.Commands;
 
 namespace CleanAssessment.Controllers
 {
@@ -17,6 +19,12 @@ namespace CleanAssessment.Controllers
                 LastName = lastName
             });
             return Ok(customers);
+        }
+        [HttpPost("delete")]
+        public async Task<IActionResult> Delete(CustomerResponse customer)
+        {
+            var response = await Mediator.Send(new DeleteCustomerCommand(customer));
+            return Ok(response);
         }
     }
 }

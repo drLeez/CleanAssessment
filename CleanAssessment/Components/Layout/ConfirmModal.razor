@@ -1,0 +1,63 @@
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icon" />
+            @Title
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="@ButtonColor" Variant="Variant.Filled" OnClick="Confirm">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; } = Icons.Material.Filled.QuestionMark;
+    [Parameter, EditorRequired]
+    public required string Title { get; set; }
+    [Parameter, EditorRequired]
+    public required string ContentText { get; set; }
+    [Parameter]
+    public Color ButtonColor { get; set; } = Color.Info;
+    [Parameter]
+    public string ButtonText { get; set; } = "Confirm";
+
+    private void Cancel()
+    {
+        MudDialog.Close(DialogResult.Cancel);
+    }
+    private void Confirm()
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    public static async Task<IDialogReference> Dialog(IDialogService service
+        , string title
+        , string content
+        , string buttonText
+        , string icon = Icons.Material.Filled.QuestionMark
+        , Color buttonColor = Color.Info )
+    {
+        var parameters = new DialogParameters<ConfirmModal>
+        {
+            { x => x.Title, title },
+            { x => x.ContentText, content },
+            { x => x.ButtonText, buttonText },
+            { x => x.Icon, icon },
+            { x => x.ButtonColor, buttonColor },
+        };
+        var options = new DialogOptions()
+        {
+            CloseButton = false,
+            MaxWidth = MaxWidth.Small,
+        };
+        return await service.ShowAsync<ConfirmModal>($"Confirm - {title}", parameters, options);
+    }
+}

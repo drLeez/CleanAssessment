@@ -117,3 +117,8 @@ h1:focus {
 .column-options > .mud-menu {
     margin-left: -10px;
 }
+tr.mud-table-row.selected > .mud-table-cell {
+    background-color: var(--mud-palette-info) !important;
+    color: white;
+    font-weight: bold;
+}

@@ -82,14 +82,17 @@ namespace CleanAssessment.Shared.Bases
         }
         public static new Task<Result<T>> SuccessAsync(string? message = null) => Task.FromResult(Fail(message));
 
-        public static Result<T> Success(T data)
+        public static Result<T> Success(T data, string? message = null)
         {
-            return new Result<T>()
+            var ret = new Result<T>()
             {
                 Data = data,
                 Succeeded = true,
             };
+            if (message != null) ret.Messages = [message];
+            return ret;
         }
         public static Task<Result<T>> SuccessAsync(T data) => Task.FromResult(Success(data));
+        public static Task<Result<T>> SuccessAsync(T data, string message) => Task.FromResult(Success(data, message));
     }
 }
