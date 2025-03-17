@@ -1,6 +1,5 @@
 :root {
     --mud-appbar-height: 48px !important;
-    --body-top-padding: calc(var(--mud-appbar-height) + 3px);
 }
 
 html, body {
@@ -57,13 +56,12 @@ h1:focus {
 
 .prim-header {
     background-color: var(--mud-palette-primary);
-    color: var(--mud-palette-surface);
     height: var(--mud-appbar-height);
     align-items: center;
 }
 .mud-main-content {
-    /*padding-top: var(--body-top-padding) !important;*/
     padding-left: 5px;
+    padding-right: 5px;
     top: 5px;
     position: inherit;
 }
@@ -96,4 +94,20 @@ h1:focus {
     text-align: right;
     margin: auto;
     text-wrap: nowrap;
+}
+.mud-table-cell {
+    padding: 4px !important;
+}
+.filter-header-cell {
+    padding: 0 !important;
+    height: min-content !important;
+}
+.filter-header-cell > .d-flex {
+    gap: 0 !important;
+}
+.filter-header-cell > .d-flex > .mud-input-control {
+    margin: 0 !important;
+}
+.mud-input-numeric-spin {
+    visibility: hidden !important;
 }

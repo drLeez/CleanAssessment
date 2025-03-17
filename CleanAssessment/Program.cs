@@ -52,6 +52,7 @@ if (builder.Services.All(x => x.ServiceType != typeof(HttpClient)))
 
 builder.Services.AddScoped<IKeyboardHelper, KeyboardHelper>();
 builder.Services.AddScoped<ISnackBarHelper, SnackBarHelper>();
+builder.Services.AddScoped<ICookieHelper, CookieHelper>();
 
 builder.Services.AddSecondLayerInterface<IManager>(ServiceType.Transient);
 

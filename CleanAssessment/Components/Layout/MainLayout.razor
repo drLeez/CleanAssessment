@@ -1,10 +1,12 @@
 ﻿@using System.Diagnostics
+@using CleanAssessment.Helpers
 @inherits LayoutComponentBase
 
 @inject IJSRuntime _jsRuntime;
+@inject ICookieHelper _cookieHelper;
 
 @* Required *@
-<MudThemeProvider />
+<MudThemeProvider @bind-IsDarkMode="_darkMode" Theme="@AssessmentTheme" />
 <MudPopoverProvider />
 
 @* Needed for dialogs *@
@@ -15,13 +17,20 @@
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Size="Size.Medium" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle" />
         <MudSpacer />
+        <MudTooltip Text="@(_darkMode ? "Light Mode" : "Dark Mode")">
+            <MudIconButton Icon="@(_darkMode ? Icons.Material.Filled.WbSunny : Icons.Material.Filled.DarkMode)"
+                           Color="Color.Inherit"
+                           Size="Size.Medium"
+                           OnClick="ToggleDarkMode"
+                           />
+        </MudTooltip>
         <SnackBarHistory />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
         <MudDrawerHeader Class="prim-header">
-            <MudText Typo="Typo.h5" Class="mt-1">Assessment</MudText>
+            <MudText Typo="Typo.h5" Style="color: white" Class="mt-1">Assessment</MudText>
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>
@@ -37,6 +46,35 @@
     {
         _jsRuntime.InvokeVoidAsync("Print", "toggling");
         _drawerOpen = !_drawerOpen;
+    }
+
+    private bool _darkMode = false;
+    private async Task ToggleDarkMode()
+    {
+        _darkMode = !_darkMode;
+        await _cookieHelper.SetCookie("darkMode", _darkMode.ToString());
+        StateHasChanged();
+    }
+    public MudTheme AssessmentTheme = new()
+    {
+        PaletteLight = new()
+        {
+            Primary = Colors.Indigo.Default,
+            AppbarBackground = Colors.Indigo.Default,
+        },
+        PaletteDark = new()
+        {
+            Primary = Colors.Indigo.Darken1,
+            AppbarBackground = Colors.Indigo.Darken1,
+        }
+    };
+
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
+        if (!first) return;
+        var darkMode = await _cookieHelper.GetCookie("darkMode");
+        _darkMode = darkMode.ToLower() == "true";
+        StateHasChanged();
     }
 }
 

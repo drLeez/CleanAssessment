@@ -12,20 +12,39 @@
 <MudDataGrid
     T="CustomerResponse"
     @ref="_grid"
-    Items="_customers">
+    Items="_customers"
+    SortMode="SortMode.Multiple"
+    Filterable
+    FilterMode="DataGridFilterMode.ColumnFilterRow"
+    FixedHeader
+    Bordered
+    Striped
+    Loading="@_loading"
+>
     <ToolBarContent>
-        <MudStack Row>
-            <MudTextField T="string" @bind-Text="_firstNameFilter" Immediate Clearable />
-            <MudTextField T="string" @bind-Text="_lastNameFilter" Immediate Clearable />
+        <MudStack Row Style="align-items: center">
+            <MudTextField Label="First Name" T="string" @bind-Text="_firstNameFilter" Immediate Clearable Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudTextField Label="Last Name" T="string" @bind-Text="_lastNameFilter" Immediate Clearable Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudSwitch Label="Use Date Filter" @bind-Value="_useDateFilter" />
-            <MudDateRangePicker @bind-DateRange="_dateRangeFilter" />
+            <MudDateRangePicker Label="Account Created Range" @bind-DateRange="_dateRangeFilter" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                Disabled="@(!_useDateFilter)"
+                                />
             <MudDivider Vertical="true" FlexItem="true" />
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Refresh">Refresh</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Refresh" EndIcon="@Icons.Material.Filled.Refresh">Refresh</MudButton>
         </MudStack>
     </ToolBarContent>
     <Columns>
         <PropertyColumn Title="First Name" Property="x => x.FirstName" />
-        <PropertyColumn Title="Middle Name" Property="x => x.FirstName" />
-        <PropertyColumn Title="Last Name" Property="x => x.FirstName" />
+        <PropertyColumn Title="Middle Name" Property="x => x.MiddleName" />
+        <PropertyColumn Title="Last Name" Property="x => x.LastName" />
+        <PropertyColumn Title="#" Property="x => x.NameNumber" />
+        <PropertyColumn Title="Full Name" Property="x => x.FullName" Class="bold-grid-header" />
+        <TemplateColumn Class="grid-spacer-column" />
+        <PropertyColumn Title="Account Created" Property="x => x.DateOfAccountCreation" Filterable="false">
+            <CellTemplate>
+                @context.Item.DateOfAccountCreation.ToString("MMM d yyyy")
+            </CellTemplate>
+        </PropertyColumn>
+        <PropertyColumn Title="Address" Property="x => x.Address" />
     </Columns>
 </MudDataGrid>
