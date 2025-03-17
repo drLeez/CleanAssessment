@@ -1,0 +1,114 @@
+﻿@using CleanAssessment.Domain.Features.Customer
+@using CleanAssessment.Helpers
+@inject ISnackBarHelper _snackBarHelper
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Add" />
+            Add Customer
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        
+        <MudTextField T="string" Label="First Name" @bind-Text="_customer.FirstName" Immediate Variant="Variant.Outlined" Margin="Margin.Dense" Required />
+        <MudTextField T="string" Label="Middle Name" @bind-Text="_customer.MiddleName" Immediate Variant="Variant.Outlined" Margin="Margin.Dense" />
+        <MudTextField T="string" Label="Last Name" @bind-Text="_customer.LastName" Immediate Variant="Variant.Outlined" Margin="Margin.Dense" Required />
+
+        <MudNumericField T="int" Label="#" @bind-Value="_customer.NameNumber" Immediate Variant="Variant.Outlined" Margin="Margin.Dense" Required />
+
+        <MudDivider />
+
+        <MudDatePicker Label="Date of Account Creation" @bind-Date="_dateWrapper" Variant="Variant.Outlined" Margin="Margin.Dense" Disabled />
+
+        <MudDivider />
+
+        <MudNumericField T="int?" Label="Age" @bind-Value="_customer.Age" Immediate Variant="Variant.Outlined" Margin="Margin.Dense" />
+
+        <MudTextField T="string" Label="Address" @bind-Text="_customer.Address" Immediate Variant="Variant.Outlined" Margin="Margin.Dense" />
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">Add</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private DateTime? _dateWrapper
+    {
+        get => _customer.DateOfAccountCreation;
+        set
+        {
+            if (value == _customer.DateOfAccountCreation) return;
+            if (value == null) return;
+            _customer.DateOfAccountCreation = value.Value;
+        }
+    }
+
+    private CustomerResponse _customer = new()
+    {
+        FirstName = string.Empty,
+        LastName = string.Empty,
+        NameNumber = 1,
+        DateOfAccountCreation = DateTime.Today,
+    };
+
+    private void Cancel()
+    {
+        MudDialog.Close(DialogResult.Cancel);
+    }
+    private void Submit()
+    {
+        if (string.IsNullOrEmpty(_customer.FirstName))
+        {
+            _snackBarHelper.Add("First Name is required!", Severity.Warning, false);
+            return;
+        }
+        else if (_customer.FirstName.Length > 100)
+        {
+            _snackBarHelper.Add("First Name exceeds 100 characters in length!", Severity.Warning, false);
+            return;
+        }
+
+        if (_customer.MiddleName != null && _customer.MiddleName.Length > 100)
+        {
+            _snackBarHelper.Add("If Middle Name is provided must not exceed 100 characters in length!", Severity.Warning, false);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(_customer.LastName))
+        {
+            _snackBarHelper.Add("Last Name is required!", Severity.Warning, false);
+            return;
+        }
+        else if (_customer.LastName.Length > 100)
+        {
+            _snackBarHelper.Add("Last Name exceeds 100 characters in length!", Severity.Warning, false);
+            return;
+        }
+
+        if (_customer.NameNumber < 1)
+        {
+            _snackBarHelper.Add("Name # must be 1 or greater!", Severity.Warning, false);
+            return;
+        }
+
+        if (_customer.Age != null && _customer.Age < 18)
+        {
+            _snackBarHelper.Add("If Age is provided, must be 18 or older", Severity.Warning, false);
+            return;
+        }
+
+        if (_customer.Address != null && _customer.Address.Length > 500)
+        {
+            _snackBarHelper.Add("If Address is provided must not exceed 500 characters in length!", Severity.Warning, false);
+            return;
+        }
+
+        MudDialog.Close(DialogResult.Ok(_customer));
+    }
+}

@@ -14,7 +14,7 @@ namespace CleanAssessment.Controllers
             var customers = await Mediator.Send(new GetAllCustomersQuery()
             {
                 StartDate = startDate,
-                EndDate = startDate,
+                EndDate = endDate,
                 FirstName = firstName,
                 LastName = lastName
             });
@@ -30,6 +30,12 @@ namespace CleanAssessment.Controllers
         public async Task<IActionResult> Update(CustomerResponse customer)
         {
             var response = await Mediator.Send(new UpdateCustomerCommand(customer));
+            return Ok(response);
+        }
+        [HttpPost("save")]
+        public async Task<IActionResult> Save(CustomerResponse customer)
+        {
+            var response = await Mediator.Send(new SaveCustomerCommand(customer));
             return Ok(response);
         }
     }

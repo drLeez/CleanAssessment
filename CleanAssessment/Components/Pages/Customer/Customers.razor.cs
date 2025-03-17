@@ -1,6 +1,7 @@
 ﻿using CleanAssessment.Components.Layout;
 using CleanAssessment.Domain.Features.Customer;
 using MudBlazor;
+using static MudBlazor.CategoryTypes;
 
 namespace CleanAssessment.Components.Pages.Customer
 {
@@ -59,7 +60,31 @@ namespace CleanAssessment.Components.Pages.Customer
         }
         private async Task InvokeAddModal()
         {
-
+            var options = new DialogOptions()
+            {
+                CloseButton = false,
+                MaxWidth = MaxWidth.Large,
+                BackdropClick = false,
+            };
+            var dialog = await _dialogService.ShowAsync<AddCustomerModal>("Add Customer", options);
+            var result = await dialog.Result;
+            if (!result.Canceled)
+            {
+                var data = result.Data as CustomerResponse;
+                if (data != null)
+                {
+                    var response = await _customerManager.AddAsync(data);
+                    if (response.Succeeded)
+                    {
+                        _snackBarHelper.Add($"{data.FullName} successfully added!", Severity.Success);
+                    }
+                    else
+                    {
+                        _snackBarHelper.Add(response.Messages, Severity.Error);
+                    }
+                }
+                await Refresh();
+            }
         }
         private async Task InvokeEditModal()
         {
@@ -110,7 +135,7 @@ namespace CleanAssessment.Components.Pages.Customer
                 }
                 await Refresh();
             }
-            _loading = true;
+            _loading = false;
             StateHasChanged();
         }
     }

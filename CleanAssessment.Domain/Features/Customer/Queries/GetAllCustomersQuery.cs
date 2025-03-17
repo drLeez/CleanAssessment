@@ -42,7 +42,7 @@ namespace CleanAssessment.Domain.Features.Customer.Queries
                         && request.StartDate != 0
                         && request.EndDate != null
                         && request.EndDate != 0
-                        && request.StartDate < request.EndDate;
+                        && request.StartDate <= request.EndDate;
                     var validFirstName = !string.IsNullOrEmpty(request.FirstName) && request.FirstName.Length <= 100;
                     var validLastName = !string.IsNullOrEmpty(request.LastName) && request.LastName.Length <= 100;
 

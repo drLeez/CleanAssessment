@@ -1,5 +1,6 @@
 :root {
     --mud-appbar-height: 48px !important;
+    /*--mud-palette-table-striped: rgba(255, 255, 255, 0.1) !important;*/
 }
 
 html, body {

@@ -17,6 +17,13 @@ namespace CleanAssessment.Managers.Customer
             _jsRuntime = jsRuntime;
         }
 
+        public async Task<IResult<int>> AddAsync(CustomerResponse customer)
+        {
+            var url = $"{Routes.CustomerEndpoints.Save}";
+            var response = await _httpClient.PostAsJsonAsync(url, customer);
+            return await response.ToResult<int>();
+        }
+
         public async Task<IResult<int>> DeleteAsync(CustomerResponse customer)
         {
             var url = $"{Routes.CustomerEndpoints.Delete}";

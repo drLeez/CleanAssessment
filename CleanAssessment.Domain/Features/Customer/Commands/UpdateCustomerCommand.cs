@@ -32,47 +32,47 @@ namespace CleanAssessment.Domain.Features.Customer.Commands
                 {
                     return await Result<CustomerResponse>.FailAsync($"Invalid request");
                 }
-
-                if (string.IsNullOrEmpty(request.Customer.FirstName) || request.Customer.FirstName.Length > 100)
+                var incoming = request.Customer;
+                if (string.IsNullOrEmpty(incoming.FirstName) || incoming.FirstName.Length > 100)
                 {
-                    return await Result<CustomerResponse>.FailAsync($"Invalid First Name: \"{request.Customer.FirstName}\"");
+                    return await Result<CustomerResponse>.FailAsync($"Invalid First Name: \"{incoming.FirstName}\"");
                 }
-                if (request.Customer.MiddleName != null && request.Customer.MiddleName.Length > 100)
+                if (incoming.MiddleName != null && incoming.MiddleName.Length > 100)
                 {
-                    return await Result<CustomerResponse>.FailAsync($"Invalid Middle Name (max length 100 characters): \"{request.Customer.MiddleName}\"");
+                    return await Result<CustomerResponse>.FailAsync($"Invalid Middle Name (max length 100 characters): \"{incoming.MiddleName}\"");
                 }
-                if (string.IsNullOrEmpty(request.Customer.LastName) || request.Customer.LastName.Length > 100)
+                if (string.IsNullOrEmpty(incoming.LastName) || incoming.LastName.Length > 100)
                 {
-                    return await Result<CustomerResponse>.FailAsync($"Invalid Last Name: \"{request.Customer.LastName}\"");
-                }
-
-                if (request.Customer.Age < 18)
-                {
-                    return await Result<CustomerResponse>.FailAsync($"Invalid Age (must be 18 or older): \"{request.Customer.Age}\"");
+                    return await Result<CustomerResponse>.FailAsync($"Invalid Last Name: \"{incoming.LastName}\"");
                 }
 
-                if (request.Customer.Address != null && request.Customer.Address.Length > 500)
+                if (incoming.Age < 18)
                 {
-                    return await Result<CustomerResponse>.FailAsync($"Invalid Address (max length 500 characters): \"{request.Customer.Address}\"");
+                    return await Result<CustomerResponse>.FailAsync($"Invalid Age (must be 18 or older): \"{incoming.Age}\"");
+                }
+
+                if (incoming.Address != null && incoming.Address.Length > 500)
+                {
+                    return await Result<CustomerResponse>.FailAsync($"Invalid Address (max length 500 characters): \"{incoming.Address}\"");
                 }
 
                 var customer = _unitOfWork.Repository<DB.Models.Customer>().Entities.SingleOrDefault(
-                    x => x.CustomerId == request.Customer.CustomerId
+                    x => x.CustomerId == incoming.CustomerId
                 );
                 if (customer == null)
                 {
-                    return await Result<CustomerResponse>.FailAsync($"Could not find Customer to delete: {request.Customer.FullName}");
+                    return await Result<CustomerResponse>.FailAsync($"Could not find Customer to delete: {incoming.FullName}");
                 }
                 
-                customer.FirstName = request.Customer.FirstName;
-                customer.MiddleName = request.Customer.MiddleName;
-                customer.LastName = request.Customer.LastName;
-                customer.Age = request.Customer.Age;
-                customer.Address = request.Customer.Address;
+                customer.FirstName = incoming.FirstName;
+                customer.MiddleName = incoming.MiddleName;
+                customer.LastName = incoming.LastName;
+                customer.Age = incoming.Age;
+                customer.Address = incoming.Address;
 
                 await _unitOfWork.Commit(cancellationToken);
 
-                return await Result<CustomerResponse>.SuccessAsync(request.Customer, $"{request.Customer.FullName} has been deleted");
+                return await Result<CustomerResponse>.SuccessAsync(incoming, $"{incoming.FullName} has been deleted");
             }
             catch (Exception ex)
             {
