@@ -122,3 +122,9 @@ tr.mud-table-row.selected > .mud-table-cell {
     color: white;
     font-weight: bold;
 }
+.mud-input-control.mud-input-required > .mud-input-control-input-container > .mud-input-label::after {
+    font-weight: bold;
+    margin-left: 2px;
+    margin-bottom: 2px;
+    color: var(--mud-palette-error);
+}

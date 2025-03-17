@@ -71,6 +71,7 @@ namespace CleanAssessment.Domain.Features.Customer.Queries
                             LastName = x.LastName,
                             NameNumber = x.DuplicateNumber,
                             DateOfAccountCreation = DateTimeTools.FromDateId(x.AccDateId),
+                            Age = x.Age,
                             Address = x.Address,
                         }).ToList();
                     if (validFirstName)

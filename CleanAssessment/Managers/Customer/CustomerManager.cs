@@ -2,6 +2,7 @@
 using CleanAssessment.Domain.Features.Customer.Queries;
 using CleanAssessment.Shared.Bases;
 using CleanAssessment.Shared.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
 
 namespace CleanAssessment.Managers.Customer
@@ -21,6 +22,13 @@ namespace CleanAssessment.Managers.Customer
             var url = $"{Routes.CustomerEndpoints.Delete}";
             var response = await _httpClient.PostAsJsonAsync(url, customer);
             return await response.ToResult<int>();
+        }
+
+        public async Task<IResult<CustomerResponse>> EditAsync(CustomerResponse customer)
+        {
+            var url = $"{Routes.CustomerEndpoints.Update}";
+            var response = await _httpClient.PostAsJsonAsync(url, customer);
+            return await response.ToResult<CustomerResponse>();
         }
 
         public async Task<IResult<List<CustomerResponse>>> GetAllAsync(DateTime? startDate, DateTime? endDate, string? firstName, string? lastName)

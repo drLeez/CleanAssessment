@@ -29,6 +29,15 @@ namespace CleanAssessment.Components.Pages.Customer
         {
             return item == _grid.SelectedItem ? $"selected" : string.Empty;
         }
+        private async Task OnRowClick(DataGridRowClickEventArgs<CustomerResponse> args)
+        {
+            if (args.MouseEventArgs.Detail == 2)
+            {
+                await _grid.SetSelectedItemAsync(args.Item);
+                await _grid.SetEditingItemAsync(args.Item);
+            }
+            StateHasChanged();
+        }
 
         private async Task Refresh()
         {
@@ -54,7 +63,29 @@ namespace CleanAssessment.Components.Pages.Customer
         }
         private async Task InvokeEditModal()
         {
-
+            if (_grid.SelectedItem == null)
+            {
+                _snackBarHelper.Add("Select a customer before attempting to edit", Severity.Warning, false);
+            }
+            await _grid.SetEditingItemAsync(_grid.SelectedItem);
+        }
+        private async Task CommitEdit(CustomerResponse customer)
+        {
+            _loading = true;
+            StateHasChanged();
+            
+            var response = await _customerManager.EditAsync(customer);
+            if (response.Succeeded)
+            {
+                _snackBarHelper.Add($"Changes to customer successfully saved", Severity.Success);
+            }
+            else
+            {
+                _snackBarHelper.Add(response.Messages, Severity.Error);
+            }
+            
+            _loading = false;
+            StateHasChanged();
         }
         private async Task InvokeDeleteModal()
         {
@@ -63,6 +94,8 @@ namespace CleanAssessment.Components.Pages.Customer
                 , icon: Icons.Material.Filled.Delete
                 , buttonColor: Color.Error
                 );
+            _loading = true;
+            StateHasChanged();
             var result = await dialog.Result;
             if (!result.Canceled)
             {
@@ -77,6 +110,8 @@ namespace CleanAssessment.Components.Pages.Customer
                 }
                 await Refresh();
             }
+            _loading = true;
+            StateHasChanged();
         }
     }
 }

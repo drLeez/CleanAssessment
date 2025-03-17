@@ -15,6 +15,10 @@
     @ref="_grid"
     Items="_customers"
     SortMode="SortMode.Multiple"
+    ReadOnly="false"
+    EditMode="DataGridEditMode.Form"
+    EditTrigger="DataGridEditTrigger.Manual"
+    CommittedItemChanges="CommitEdit"
     Filterable
     FilterMode="DataGridFilterMode.ColumnFilterRow"
     FixedHeader
@@ -24,6 +28,8 @@
     Height="calc(100vh - 220px)"
     LoadingProgressColor="Color.Primary"
     RowClassFunc="RowClassFunc"
+    RowClick="OnRowClick"
+    SelectOnRowClick="true"
     Loading="@_loading"
 >
     <ToolBarContent>
@@ -53,17 +59,17 @@
     </ColGroup>
     <Columns>
         <PropertyColumn Title="First Name" Property="x => x.FirstName" />
-        <PropertyColumn Title="Middle Name" Property="x => x.MiddleName" />
+        <PropertyColumn Title="Middle Name" Property="x => x.MiddleName" Required="false" />
         <PropertyColumn Title="Last Name" Property="x => x.LastName" />
-        <PropertyColumn Title="#" Property="x => x.NameNumber" />
+        <PropertyColumn Title="#" Property="x => x.NameNumber" Editable="false" />
         <PropertyColumn Title="Full Name" Property="x => x.FullName" Class="bold-grid-header" />
-        <TemplateColumn Class="grid-spacer-column" />
-        <PropertyColumn Title="Account Created" Property="x => x.DateOfAccountCreation" Filterable="false">
+        <PropertyColumn Title="Age" Property="x => x.Age" Required="false" />
+        <PropertyColumn Title="Account Created" Property="x => x.DateOfAccountCreation" Filterable="false" Editable="false">
             <CellTemplate>
                 @context.Item.DateOfAccountCreation.ToString("MMM d yyyy")
             </CellTemplate>
         </PropertyColumn>
-        <PropertyColumn Title="Address" Property="x => x.Address" />
+        <PropertyColumn Title="Address" Property="x => x.Address" Required="false" />
     </Columns>
     <NoRecordsContent>
         No Customers loaded yet...

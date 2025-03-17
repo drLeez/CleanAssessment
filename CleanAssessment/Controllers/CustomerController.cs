@@ -26,5 +26,11 @@ namespace CleanAssessment.Controllers
             var response = await Mediator.Send(new DeleteCustomerCommand(customer));
             return Ok(response);
         }
+        [HttpPost("update")]
+        public async Task<IActionResult> Update(CustomerResponse customer)
+        {
+            var response = await Mediator.Send(new UpdateCustomerCommand(customer));
+            return Ok(response);
+        }
     }
 }
