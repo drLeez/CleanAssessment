@@ -1,5 +1,7 @@
-﻿@using Microsoft.AspNetCore.Components.Rendering
+﻿@using CleanAssessment.Helpers
+@using Microsoft.AspNetCore.Components.Rendering
 @inherits MudNavLink
+@inject ICookieHelper _cookieHelper
 
 <MudStack Row Spacing="0">
     @((RenderTreeBuilder builder) => base.BuildRenderTree(builder))
@@ -17,7 +19,7 @@
     public required string Title { get; set; }
     [Parameter]
     public bool IsFavorited { get; set; } = false;
-    
+
     public static readonly Dictionary<string, string> LinkToTitles = new();
     protected override void OnParametersSet()
     {
@@ -31,6 +33,7 @@
     {
         IsFavorited = !IsFavorited;
         await WriteFavsToCookie();
+        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool first)
@@ -42,12 +45,29 @@
 
     public static readonly HashSet<FavNavLink> Links = new();
     public static IEnumerable<FavNavLink> Favorites => Links.Where(x => x.IsFavorited);
-    private async Task ReadFavsFromCookie()
+    public async Task ReadFavsFromCookie()
     {
-
+        var faveString = await _cookieHelper.GetCookie("favoriteLinks");
+        if (!string.IsNullOrEmpty(faveString))
+        {
+            var faves = faveString.Split(',');
+            foreach (var fave in faves)
+            {
+                var first = Links.FirstOrDefault(x => x.Title == fave);
+                if (first != null)
+                {
+                    first.IsFavorited = true;
+                }
+            }
+        }
     }
     private async Task WriteFavsToCookie()
     {
-
+        List<string> list = new();
+        foreach (var link in Favorites)
+        {
+            list.Add(link.Title);
+        }
+        await _cookieHelper.SetCookie("favoriteLinks", string.Join(',', list));
     }
 }

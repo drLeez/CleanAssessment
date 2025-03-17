@@ -10,11 +10,9 @@ namespace CleanAssessment.Managers.Customer
     public class CustomerManager : ICustomerManager
     {
         private readonly HttpClient _httpClient;
-        private readonly IJSRuntime _jsRuntime;
-        public CustomerManager(HttpClient httpClient, IJSRuntime jsRuntime)
+        public CustomerManager(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _jsRuntime = jsRuntime;
         }
 
         public async Task<IResult<int>> AddAsync(CustomerResponse customer)

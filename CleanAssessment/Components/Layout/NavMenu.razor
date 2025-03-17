@@ -15,10 +15,18 @@
     <MudNavGroup Title="Misc" Expanded="true">
         <FavNavLink Title="Counter" Href="counter" Icon="@Icons.Material.Filled.Numbers">Counter</FavNavLink>
         <FavNavLink Title="Customers" Href="customer" Icon="@Icons.Material.Filled.Person">Customers</FavNavLink>
+        <FavNavLink Title="Payment Methods" Href="paymentMethods" Icon="@Icons.Material.Filled.AttachMoney">Payment Methods</FavNavLink>
     </MudNavGroup>
 </MudNavMenu>
 
 @code {
     [Parameter]
     public bool ShowFavorties { get; set; } = true;
+
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
+        if (!first) return;
+        // await FavNavLink.Links.First().ReadFavsFromCookie();
+        StateHasChanged();
+    }
 }

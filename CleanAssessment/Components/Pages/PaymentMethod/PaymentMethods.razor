@@ -1,0 +1,70 @@
+﻿@page "/paymentMethods"
+@using CleanAssessment.Domain.Features.Customer
+@using CleanAssessment.Domain.Features.PaymentMethod
+@using CleanAssessment.Helpers
+@using CleanAssessment.Managers.Customer
+@using CleanAssessment.Managers.PaymentMethod
+@inject IPaymentMethodManager _paymentMethodManager
+@inject ICustomerManager _customerManager
+@inject IDialogService _dialogService
+@inject ISnackBarHelper _snackBarHelper
+
+<MudText Typo="Typo.h4" Color="Color.Primary">Payment Methods</MudText>
+
+<MudDataGrid T="PaymentMethodResponse"
+             @ref="_grid"
+             Items="_paymentMethods"
+             SortMode="SortMode.Multiple"
+             ReadOnly="false"
+             EditMode="DataGridEditMode.Form"
+             EditTrigger="DataGridEditTrigger.Manual"
+             CommittedItemChanges="CommitEdit"
+             Filterable
+             FilterMode="DataGridFilterMode.ColumnFilterRow"
+             FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
+             FixedHeader
+             Bordered
+             Striped
+             RowsPerPage="100"
+             Height="calc(100vh - 220px)"
+             LoadingProgressColor="Color.Primary"
+             RowClassFunc="RowClassFunc"
+             RowClick="OnRowClick"
+             SelectOnRowClick="true"
+             Loading="@_loading">
+    <ToolBarContent>
+        <MudStack Row Style="align-items: center">
+            
+            <MudAutocomplete T="CustomerResponse" Label="Customer" @bind-Value="FilterCustomer" SearchFunc="SearchCustomers"
+                             ToStringFunc="@(x => x?.FullName)" Clearable
+                             Margin="Margin.Dense" Dense Variant="Variant.Outlined" Required>
+                <ItemTemplate Context="e">
+                    <div>
+                        <b style="color: var(--mud-palette-action-default)">@e.FullName</b>
+                    </div>
+                </ItemTemplate>
+            </MudAutocomplete>
+
+            <MudDivider Vertical="true" FlexItem="true" />
+            
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(async() => await Refresh(true))" EndIcon="@Icons.Material.Filled.Refresh">Refresh</MudButton>
+        
+        </MudStack>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 500px" />
+        <col style="width: 150px" />
+        <col style="width: 500px" />
+    </ColGroup>
+    <Columns>
+        <PropertyColumn Title="NickName" Property="x => x.NickName" />
+        <PropertyColumn Title="Expiration Date" Property="x => x.ExpirationDate" Filterable="false" />
+        <PropertyColumn Title="Type" Property="x => x.PaymentMethodTypeDesc" Editable="false" />
+    </Columns>
+    <NoRecordsContent>
+        No Payment Methods loaded yet...
+    </NoRecordsContent>
+    <PagerContent>
+        <MudDataGridPager PageSizeOptions="@(new int[] {10, 50, 100})"></MudDataGridPager>
+    </PagerContent>
+</MudDataGrid>

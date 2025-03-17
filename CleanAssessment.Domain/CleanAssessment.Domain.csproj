@@ -16,4 +16,8 @@
     <ProjectReference Include="..\CleanAssessment.Shared\CleanAssessment.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\PaymentMethod\Commands\" />
+  </ItemGroup>
+
 </Project>

@@ -18,6 +18,7 @@ namespace CleanAssessment.DB
         public string GetConnectionString => Database.GetDbConnection().ConnectionString;
 
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
         #endregion
 
@@ -58,6 +59,10 @@ namespace CleanAssessment.DB
                     .HasColumnType("int");
             });
 
+            modelBuilder.Entity<PaymentMethod>(entity => entity.HasNoKey());
         }
+
+        //public IEnumerable<PaymentMethod> GetPaymentMethods(int customerId)
+        //    => PaymentMethods.FromSqlRaw($"EXEC GetPaymentMethods {customerId}").ToList();
     }
 }
