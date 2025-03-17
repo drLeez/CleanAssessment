@@ -111,3 +111,9 @@ h1:focus {
 .mud-input-numeric-spin {
     visibility: hidden !important;
 }
+.mud-table-head {
+    text-wrap: nowrap !important;
+}
+.column-options > .mud-menu {
+    margin-left: -10px;
+}

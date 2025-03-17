@@ -23,7 +23,7 @@ namespace CleanAssessment.Components.Pages.Customer
         {
             _loading = true;
             StateHasChanged();
-            var response = await _customerManager.GetAllAsync(null, null, "bob", null);
+            var response = await _customerManager.GetAllAsync(_dateRangeFilter?.Start, _dateRangeFilter?.End, _firstNameFilter, _lastNameFilter);
             if (response.Succeeded)
             {
                 _customers = response.Data.ToList();

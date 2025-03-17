@@ -7,7 +7,7 @@
 @inject ICustomerManager _customerManager
 @inject ISnackBarHelper _snackBarHelper
 
-<h3>Customers</h3>
+<MudText Typo="Typo.h4" Color="Color.Primary">Customers</MudText>
 
 <MudDataGrid
     T="CustomerResponse"
@@ -19,6 +19,9 @@
     FixedHeader
     Bordered
     Striped
+    RowsPerPage="100"
+    Height="calc(100vh - 220px)"
+    LoadingProgressColor="Color.Primary"
     Loading="@_loading"
 >
     <ToolBarContent>
@@ -33,6 +36,16 @@
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Refresh" EndIcon="@Icons.Material.Filled.Refresh">Refresh</MudButton>
         </MudStack>
     </ToolBarContent>
+    <ColGroup>
+        <col style="width: 200px" />
+        <col style="width: 200px" />
+        <col style="width: 200px" />
+        <col style="width: 50px" />
+        <col style="width: 300px" />
+        <col style="width: 10px" />
+        <col style="width: 150px" />
+        <col style="width: 500px" />
+    </ColGroup>
     <Columns>
         <PropertyColumn Title="First Name" Property="x => x.FirstName" />
         <PropertyColumn Title="Middle Name" Property="x => x.MiddleName" />
@@ -47,4 +60,10 @@
         </PropertyColumn>
         <PropertyColumn Title="Address" Property="x => x.Address" />
     </Columns>
+    <NoRecordsContent>
+        No Customers loaded yet...
+    </NoRecordsContent>
+    <PagerContent>
+        <MudDataGridPager PageSizeOptions="@(new int[] {50, 100, 1000})"></MudDataGridPager>
+    </PagerContent>
 </MudDataGrid>
