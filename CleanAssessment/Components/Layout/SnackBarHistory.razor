@@ -1,0 +1,71 @@
+﻿@using CleanAssessment.Helpers
+@using static CleanAssessment.Helpers.SnackBarHelper
+@inject IKeyboardHelper _keyboardHelper
+
+<MudTooltip Text="Notification History">
+    <MudBadge Icon="@Icons.Material.Filled.History" Color="Color.Inherit" Overlap Class="transparent-badge">
+        <MudIconButton Icon="@Icons.Material.Filled.Chat" Size="Size.Small" Color="Color.Inherit" OnClick="ToggleOpen" />
+    </MudBadge>
+</MudTooltip>
+<MudPopover Open="@_open" Fixed AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+    <MudStack Row Style="padding-left: 5px; padding-right: 5px">
+        <MudTextField T="string" Label="Search" @bind-Text="SearchTerm" Clearable Immediate
+                      Adornment="Adornment.End" IconSize="Size.Small" AdornmentIcon="@Icons.Material.Filled.Search" />
+        <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" onclick="@(() => Close())" Class="err-hover" Style="margin: auto" />
+    </MudStack>
+    <MudStack Class="sh-body" Style="min-width: 400px; min-height: 50px; background-color: var(--mud-palette-action-default-hover)">
+        @foreach (var snack in _history)
+        {
+            <MudStack Class="sh-row" Row>
+                <div class="sh-info">
+                    @($"{snack.Page} ({snack.TimeStamp:MMM d h:mm tt})")
+                </div>
+                <MudSnackbarElement Snackbar="@snack.Snack" />
+            </MudStack>
+        }
+    </MudStack>
+</MudPopover>
+
+@code {
+    private bool _open = false;
+    private void ToggleOpen()
+    {
+        _open = !_open;
+        if (_open)
+        {
+            _keyboardHelper.OnKeyDown = CloseOnEsc;
+        }
+    }
+    private void Close()
+    {
+        _open = false;
+        StateHasChanged();
+    }
+
+    private string? _searchTerm;
+    private string SearchTerm
+    {
+        get => _searchTerm;
+        set
+        {
+            if (value == _searchTerm) return;
+            _searchTerm = value;
+            _history = string.IsNullOrEmpty(_searchTerm)
+                ? SnackBarHelper.History
+                : SnackBarHelper.History.Where(x
+                    => x.Page.Contains(_searchTerm, StringComparison.InvariantCultureIgnoreCase)
+                    || x.TimeStamp.ToString("(MMM d h:mm tt)").Contains(_searchTerm, StringComparison.InvariantCultureIgnoreCase)
+                    || x.Snack.Message.Contains(_searchTerm, StringComparison.InvariantCultureIgnoreCase)
+                );
+        }
+    }
+    private IEnumerable<HistoricalSnack> _history = SnackBarHelper.History;
+
+    private async Task CloseOnEsc(string keyCode)
+    {
+        if (_open && keyCode == "Escape")
+        {
+            Close();
+        }
+    }
+}

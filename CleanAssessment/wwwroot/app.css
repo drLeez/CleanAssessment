@@ -73,3 +73,27 @@ h1:focus {
 .fav-link:hover {
     background-color: var(--mud-palette-action-default-hover) !important;
 }
+.transparent-badge > .mud-badge-wrapper > .mud-badge {
+    background-color: transparent !important;
+}
+.err-hover:hover
+{
+    color: var(--mud-palette-error);
+}
+.sh-body {
+    padding: 5px 3px;
+}
+.sh-body > .sh-row > .mud-snackbar {
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-top: 0;
+}
+.sh-body > .sh-row > .mud-snackbar > .mud-snackbar-content-action {
+    visibility: hidden !important;
+}
+.sh-info {
+    color: var(--mud-palette-action);
+    text-align: right;
+    margin: auto;
+    text-wrap: nowrap;
+}

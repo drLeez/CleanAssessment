@@ -13,8 +13,19 @@
 </MudStack>
 
 @code {
+    [Parameter, EditorRequired]
+    public required string Title { get; set; }
     [Parameter]
     public bool IsFavorited { get; set; } = false;
+    
+    public static readonly Dictionary<string, string> LinkToTitles = new();
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrEmpty(Href) && !string.IsNullOrEmpty(Title))
+        {
+            LinkToTitles[Href] = Title;
+        }
+    }
 
     private async Task ToggleFav()
     {

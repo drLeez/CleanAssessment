@@ -58,8 +58,8 @@ namespace CleanAssessment.Domain.Features.Customer.Queries
                     if (validDates)
                     {
                         raw = raw.Where(x
-                            => x.DOB >= startDateId
-                            && x.DOB <= endDateId
+                            => x.AccDateId >= startDateId
+                            && x.AccDateId <= endDateId
                         );
                     }
 
@@ -70,7 +70,7 @@ namespace CleanAssessment.Domain.Features.Customer.Queries
                             MiddleName = x.MiddleName,
                             LastName = x.LastName,
                             NameNumber = x.DuplicateNumber,
-                            DateOfBirth = DateTimeTools.FromDateId(x.DOB),
+                            DateOfAccountCreation = DateTimeTools.FromDateId(x.AccDateId),
                             Address = x.Address,
                         }).ToList();
                     if (validFirstName)

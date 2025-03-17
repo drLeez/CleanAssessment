@@ -1,29 +1,31 @@
 ﻿@page "/customer"
+@using CleanAssessment.Domain.Features.Customer
 @using CleanAssessment.Helpers
 @using CleanAssessment.Managers.Customer
 @inject IKeyboardHelper _keyboardHelper
 @inject IJSRuntime _jsRuntime
 @inject ICustomerManager _customerManager
+@inject ISnackBarHelper _snackBarHelper
 
 <h3>Customers</h3>
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Refresh">Refresh</MudButton>
-
-@code {
-    protected override void OnInitialized()
-    {
-        _keyboardHelper.OnKeyDown = OnKeyDown;
-    }
-
-    private async Task OnKeyDown(string key)
-    {
-        if (key == " ")
-        {
-            await _jsRuntime.InvokeVoidAsync("Print", "WORKED!!!!!!!");
-        }
-    }
-    private async Task Refresh()
-    {
-        var response = await _customerManager.GetAllAsync(null, null, "bob", null);
-    }
-}
+<MudDataGrid
+    T="CustomerResponse"
+    @ref="_grid"
+    Items="_customers">
+    <ToolBarContent>
+        <MudStack Row>
+            <MudTextField T="string" @bind-Text="_firstNameFilter" Immediate Clearable />
+            <MudTextField T="string" @bind-Text="_lastNameFilter" Immediate Clearable />
+            <MudSwitch Label="Use Date Filter" @bind-Value="_useDateFilter" />
+            <MudDateRangePicker @bind-DateRange="_dateRangeFilter" />
+            <MudDivider Vertical="true" FlexItem="true" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Refresh">Refresh</MudButton>
+        </MudStack>
+    </ToolBarContent>
+    <Columns>
+        <PropertyColumn Title="First Name" Property="x => x.FirstName" />
+        <PropertyColumn Title="Middle Name" Property="x => x.FirstName" />
+        <PropertyColumn Title="Last Name" Property="x => x.FirstName" />
+    </Columns>
+</MudDataGrid>

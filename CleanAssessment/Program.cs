@@ -4,8 +4,10 @@ using CleanAssessment.Domain.Contracts.Repositories;
 using CleanAssessment.Helpers;
 using CleanAssessment.Managers;
 using CleanAssessment.Managers.Customer;
+using CleanAssessment.Shared.Enums;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +27,15 @@ foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
 builder.Services.AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
 
-builder.Services.AddMudServices();
+builder.Services.AddMudServices(config =>
+{
+    config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+    config.SnackbarConfiguration.ShowCloseIcon = true;
+    config.SnackbarConfiguration.VisibleStateDuration = 5000;
+    config.SnackbarConfiguration.HideTransitionDuration = 100;
+    config.SnackbarConfiguration.ShowTransitionDuration = 100;
+    config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
+});
 
 if (builder.Services.All(x => x.ServiceType != typeof(HttpClient)))
 {
@@ -41,8 +51,9 @@ if (builder.Services.All(x => x.ServiceType != typeof(HttpClient)))
 }
 
 builder.Services.AddScoped<IKeyboardHelper, KeyboardHelper>();
+builder.Services.AddScoped<ISnackBarHelper, SnackBarHelper>();
 
-builder.Services.AddSecondLayerInterface<IManager>();
+builder.Services.AddSecondLayerInterface<IManager>(ServiceType.Transient);
 
 builder.Services.AddControllers();
 

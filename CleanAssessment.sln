@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanAssessment", "CleanAssessment\CleanAssessment.csproj", "{0BEB5DDE-0207-4E86-94FC-205E818E9930}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanAssessment", "CleanAssessment\CleanAssessment.csproj", "{0BEB5DDE-0207-4E86-94FC-205E818E9930}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{F9D28B39-6BBB-4E86-97EA-A9EFAFAF9FA3}"
 EndProject
@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{93EEA8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{E114DAF9-017C-47BB-BBA9-5D5A3FCE4A9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanAssessment.Shared", "CleanAssessment.Shared\CleanAssessment.Shared.csproj", "{AAD844F3-73D7-4B0D-9CA7-B4642952CFFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanAssessment.Shared", "CleanAssessment.Shared\CleanAssessment.Shared.csproj", "{AAD844F3-73D7-4B0D-9CA7-B4642952CFFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanAssessment.Domain", "CleanAssessment.Domain\CleanAssessment.Domain.csproj", "{124F970C-9E37-4507-A99E-40CD1D6BF7AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanAssessment.Domain", "CleanAssessment.Domain\CleanAssessment.Domain.csproj", "{124F970C-9E37-4507-A99E-40CD1D6BF7AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanAssessment.DB", "CleanAssessment.DB\CleanAssessment.DB.csproj", "{B1F70693-AE99-4403-A080-06EB3ADD0FE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanAssessment.DB", "CleanAssessment.DB\CleanAssessment.DB.csproj", "{B1F70693-AE99-4403-A080-06EB3ADD0FE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

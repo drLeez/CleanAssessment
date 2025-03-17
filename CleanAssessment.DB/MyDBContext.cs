@@ -52,7 +52,7 @@ namespace CleanAssessment.DB
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
-                entity.Property(e => e.DOB)
+                entity.Property(e => e.AccDateId)
                     .IsRequired()
                     .HasColumnName("AccountCreationDateId")
                     .HasColumnType("int");

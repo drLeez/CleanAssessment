@@ -1,8 +1,10 @@
-﻿namespace CleanAssessment.Helpers
+﻿using CleanAssessment.Shared.Enums;
+
+namespace CleanAssessment.Helpers
 {
     public static class ServiceHelper
     {
-        public static void AddSecondLayerInterface<T>(this IServiceCollection services)
+        public static void AddSecondLayerInterface<T>(this IServiceCollection services, ServiceType serviceType)
         {
             var baseInterface = typeof(T);
             if (!baseInterface.IsInterface) throw new ArgumentException($"Type param T ({baseInterface.Name}) must be an interface");
@@ -22,7 +24,19 @@
             {
                 if (baseInterface.IsAssignableFrom(type.Service))
                 {
-                    services.AddTransient(type.Service, type.Implementation);
+                    switch (serviceType)
+                    {
+                        case ServiceType.Transient:
+                            services.AddTransient(type.Service, type.Implementation);
+                            break;
+                        case ServiceType.Scoped:
+                            services.AddScoped(type.Service, type.Implementation);
+                            break;
+                        case ServiceType.Singleton:
+                            services.AddSingleton(type.Service, type.Implementation);
+                            break;
+                    }
+                    
                 }
             }
         }

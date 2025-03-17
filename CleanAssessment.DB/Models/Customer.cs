@@ -20,8 +20,7 @@ namespace CleanAssessment.DB.Models
         [Required]
         public int DuplicateNumber { get; set; }
         [Required]
-        public int DOB { get; set; }
-        [Required]
+        public int AccDateId { get; set; }
         public string? Address { get; set; }
     }
 }

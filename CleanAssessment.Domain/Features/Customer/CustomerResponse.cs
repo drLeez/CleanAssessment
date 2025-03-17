@@ -22,7 +22,7 @@ namespace CleanAssessment.Domain.Features.Customer
                 return ret;
             }
         }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime DateOfAccountCreation { get; set; }
         public string? Address { get; set; }
     }
 }
