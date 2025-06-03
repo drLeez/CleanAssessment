@@ -4,11 +4,14 @@ using CleanAssessment.Domain.Contracts.Repositories;
 using CleanAssessment.Helpers;
 using CleanAssessment.Managers;
 using CleanAssessment.Managers.Customer;
+using CleanAssessment.Shared.Attributes;
 using CleanAssessment.Shared.Enums;
+using CleanAssessment.Shared.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Services;
+using static CleanAssessment.Helpers.ServiceHelper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +27,10 @@ foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
     builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assembly));
 }
 
+var test = new TestClass();
+
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
-builder.Services.AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+builder.Services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
 
 builder.Services.AddMudServices(config =>
 {
@@ -54,7 +59,14 @@ builder.Services.AddScoped<IKeyboardHelper, KeyboardHelper>();
 builder.Services.AddScoped<ISnackBarHelper, SnackBarHelper>();
 builder.Services.AddScoped<ICookieHelper, CookieHelper>();
 
-builder.Services.AddSecondLayerInterface<IManager>(ServiceType.Transient);
+builder.Services.AddSecondLayerInterface<IManager>(ServiceType.Scoped);
+
+var env = new WebHostEnvironment(builder.Environment);
+builder.Services.AddSingleton(env);
+
+builder.Services.AddSecondLayerInterface<ITransientService>(ServiceType.Transient);
+builder.Services.AddSecondLayerInterface<IScopedService>(ServiceType.Scoped);
+builder.Services.AddSecondLayerInterface<ISingletonService>(ServiceType.Singleton);
 
 builder.Services.AddControllers();
 

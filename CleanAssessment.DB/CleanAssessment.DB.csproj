@@ -19,4 +19,8 @@
     <Folder Include="SQL\StoredProcs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CleanAssessment.Shared\CleanAssessment.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

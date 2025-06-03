@@ -19,8 +19,8 @@ namespace CleanAssessment.Domain.Features.Customer.Commands
     }
     internal class UpdateCustomerHandler : IRequestHandler<UpdateCustomerCommand, Result<CustomerResponse>>
     {
-        private readonly IUnitOfWork<int> _unitOfWork;
-        public UpdateCustomerHandler(IUnitOfWork<int> unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+        public UpdateCustomerHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -56,7 +56,7 @@ namespace CleanAssessment.Domain.Features.Customer.Commands
                     return await Result<CustomerResponse>.FailAsync($"Invalid Address (max length 500 characters): \"{incoming.Address}\"");
                 }
 
-                var customer = _unitOfWork.Repository<DB.Models.Customer>().Entities.SingleOrDefault(
+                var customer = _unitOfWork.CustomerRepository.Entities.SingleOrDefault(
                     x => x.CustomerId == incoming.CustomerId
                 );
                 if (customer == null)

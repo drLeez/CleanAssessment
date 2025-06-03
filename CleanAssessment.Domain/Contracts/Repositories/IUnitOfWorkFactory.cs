@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace CleanAssessment.Domain.Contracts.Repositories
 {
-    public interface IUnitOfWorkFactory<I>
+    public interface IUnitOfWorkFactory
     {
-        IUnitOfWork<I> Create();
+        IUnitOfWork Create();
     }
-    public class UnitOfWorkFactory<I> : IUnitOfWorkFactory<I>
+    public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
         private readonly IDbContextFactory<MyDbContext> _contextFactory;
 
@@ -21,9 +21,9 @@ namespace CleanAssessment.Domain.Contracts.Repositories
             _contextFactory = contextFactory ?? throw new ArgumentException(nameof(contextFactory));
         }
 
-        public IUnitOfWork<I> Create()
+        public IUnitOfWork Create()
         {
-            return new UnitOfWork<I>(_contextFactory.CreateDbContext());
+            return new UnitOfWork(_contextFactory.CreateDbContext());
         }
     }
 }

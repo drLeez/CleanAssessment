@@ -1,4 +1,5 @@
 ﻿using CleanAssessment.DB;
+using CleanAssessment.Shared.Bases;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,77 +10,77 @@ using System.Threading.Tasks;
 
 namespace CleanAssessment.Domain.Contracts.Repositories
 {
-    public class RepositoryAsync<T, I> : IRepositoryAsync<T, I> where T : class
+    public class RepositoryAsync<TEntity, TId> : IRepositoryAsync<TEntity, TId> where TEntity : Entity<TId>
     {
         private readonly MyDbContext _dbContext;
         public RepositoryAsync(MyDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public IQueryable<T> Entities => _dbContext.Set<T>();
+        public IQueryable<TEntity> Entities => _dbContext.Set<TEntity>();
 
-        public async Task<T> AddAsync(T entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            await _dbContext.Set<T>().AddAsync(entity);
+            await _dbContext.Set<TEntity>().AddAsync(entity);
             return entity;
         }
 
-        public async Task<List<T>> AddRangeAsync(List<T> entities)
+        public async Task<List<TEntity>> AddRangeAsync(List<TEntity> entities)
         {
-            await _dbContext.Set<T>().AddRangeAsync(entities);
+            await _dbContext.Set<TEntity>().AddRangeAsync(entities);
             return entities;
         }
 
-        public Task DeleteAsync(T entity)
+        public Task DeleteAsync(TEntity entity)
         {
-            _dbContext.Set<T>().Remove(entity);
+            _dbContext.Set<TEntity>().Remove(entity);
             return Task.CompletedTask;
         }
 
-        public Task DeleteRangeAsync(List<T> entities)
+        public Task DeleteRangeAsync(List<TEntity> entities)
         {
-            _dbContext.Set<T>().RemoveRange(entities);
+            _dbContext.Set<TEntity>().RemoveRange(entities);
             return Task.CompletedTask;
         }
 
-        public Task DeleteRangeAsync(IQueryable<T> entities)
+        public Task DeleteRangeAsync(IQueryable<TEntity> entities)
         {
-            _dbContext.Set<T>().RemoveRange(entities);
+            _dbContext.Set<TEntity>().RemoveRange(entities);
             return Task.CompletedTask;
         }
 
-        public Task DeleteRangeAsync(ICollection<T> entities)
+        public Task DeleteRangeAsync(ICollection<TEntity> entities)
         {
-            _dbContext.Set<T>().RemoveRange(entities);
+            _dbContext.Set<TEntity>().RemoveRange(entities);
             return Task.CompletedTask;
         }
 
-        public async Task<List<T>> GetAllAsync()
+        public async Task<List<TEntity>> GetAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await _dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public async Task<T> GetByCodeAsync(string code)
+        public Task<TEntity> GetByIdAsync(TId id)
         {
-            return await _dbContext.Set<T>().FindAsync(code);
+            throw new NotImplementedException();
         }
 
-        public async Task<T> GetByIdAsync(I id)
+        public async Task<TEntity> GetByCodeAsync(string code)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            return await _dbContext.Set<TEntity>().FindAsync(code);
         }
 
-        public async Task<List<T>> GetPagedResponseAsync(int page, int pageSize)
+        public async Task<List<TEntity>> GetPagedResponseAsync(int page, int pageSize)
         {
-            var raw = _dbContext.Set<T>().Skip((page - 1) * pageSize).Take(pageSize);
+            var raw = _dbContext.Set<TEntity>().Skip((page - 1) * pageSize).Take(pageSize);
             return await raw.AsNoTracking().ToListAsync();
         }
 
-        public Task UpdateAsync(T entity) // must be an object type with an Id
+        public Task UpdateAsync(TEntity entity) // must be an object type with an Id
         {
             Type type = entity.GetType();
             PropertyInfo prop = type.GetProperty("Id");
-            var find = _dbContext.Set<T>().Find(prop.GetValue(entity));
+            var find = _dbContext.Set<TEntity>().Find(prop.GetValue(entity));
             _dbContext.Entry(find).CurrentValues.SetValues(entity);
             return Task.CompletedTask;
         }

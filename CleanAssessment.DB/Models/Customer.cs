@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CleanAssessment.Shared.Attributes;
+using CleanAssessment.Shared.Bases;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,7 +11,7 @@ using System.Threading.Tasks;
 namespace CleanAssessment.DB.Models
 {
     [Serializable]
-    public class Customer
+    public record Customer : Entity<int>
     {
         [Key]
         public int CustomerId { get; set; }

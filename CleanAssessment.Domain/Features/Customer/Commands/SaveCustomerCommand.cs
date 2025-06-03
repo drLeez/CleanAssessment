@@ -20,8 +20,8 @@ namespace CleanAssessment.Domain.Features.Customer.Commands
     }
     internal class SaveCustomerHandler : IRequestHandler<SaveCustomerCommand, Result<int>>
     {
-        private readonly IUnitOfWork<int> _unitOfWork;
-        public SaveCustomerHandler(IUnitOfWork<int> unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+        public SaveCustomerHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -57,7 +57,7 @@ namespace CleanAssessment.Domain.Features.Customer.Commands
                     return await Result<int>.FailAsync($"Invalid Address (max length 500 characters): \"{incoming.Address}\"");
                 }
 
-                var match = _unitOfWork.Repository<DB.Models.Customer>().Entities.Where(
+                var match = _unitOfWork.CustomerRepository.Entities.Where(
                     x => x.FirstName == incoming.FirstName
                       && x.LastName == incoming.LastName
                       && x.DuplicateNumber == incoming.NameNumber
@@ -78,7 +78,7 @@ namespace CleanAssessment.Domain.Features.Customer.Commands
                     Address = incoming.Address,
                 };
 
-                var savedCustomer = await _unitOfWork.Repository<DB.Models.Customer>().AddAsync(customer);
+                var savedCustomer = await _unitOfWork.CustomerRepository.AddAsync(customer);
                 await _unitOfWork.Commit(cancellationToken);
 
                 return await Result<int>.SuccessAsync(savedCustomer.CustomerId, $"{incoming.FullName} has been added");

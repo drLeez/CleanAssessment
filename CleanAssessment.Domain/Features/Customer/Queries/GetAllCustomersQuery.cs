@@ -27,8 +27,8 @@ namespace CleanAssessment.Domain.Features.Customer.Queries
         }
         internal class GetAllCustomersHandler : IRequestHandler<GetAllCustomersQuery, Result<List<CustomerResponse>>>
         {
-            private readonly IUnitOfWork<int> _unitOfWork;
-            public GetAllCustomersHandler(IUnitOfWork<int> unitOfWork)
+            private readonly IUnitOfWork _unitOfWork;
+            public GetAllCustomersHandler(IUnitOfWork unitOfWork)
             {
                 _unitOfWork = unitOfWork;
             }
@@ -53,7 +53,7 @@ namespace CleanAssessment.Domain.Features.Customer.Queries
                         endDateId = request.EndDate.Value;
                     }
 
-                    IQueryable<DB.Models.Customer> raw = _unitOfWork.Repository<DB.Models.Customer>().Entities
+                    IQueryable<DB.Models.Customer> raw = _unitOfWork.CustomerRepository.Entities
                         .OrderByDescending(x => x.CustomerId);
                     if (validDates)
                     {

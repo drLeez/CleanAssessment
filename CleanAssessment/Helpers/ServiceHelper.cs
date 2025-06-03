@@ -4,6 +4,9 @@ namespace CleanAssessment.Helpers
 {
     public static class ServiceHelper
     {
+        public interface ITransientService;
+        public interface IScopedService;
+        public interface ISingletonService;
         public static void AddSecondLayerInterface<T>(this IServiceCollection services, ServiceType serviceType)
         {
             var baseInterface = typeof(T);

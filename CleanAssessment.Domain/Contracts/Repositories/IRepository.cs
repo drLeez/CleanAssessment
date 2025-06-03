@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CleanAssessment.Shared.Bases;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace CleanAssessment.Domain.Contracts.Repositories
 {
-    public interface IRepositoryAsync<T, in I> where T : class
+    public interface IRepositoryAsync<TEntity, TId> where TEntity : Entity<TId>
     {
-        IQueryable<T> Entities { get; }
-        Task<T> GetByIdAsync(I id);
-        Task<T> GetByCodeAsync(string code);
-        Task<List<T>> GetAllAsync();
-        Task<List<T>> GetPagedResponseAsync(int page, int pageSize);
+        IQueryable<TEntity> Entities { get; }
+        Task<TEntity> GetByIdAsync(TId id);
+        Task<TEntity> GetByCodeAsync(string code);
+        Task<List<TEntity>> GetAllAsync();
+        Task<List<TEntity>> GetPagedResponseAsync(int page, int pageSize);
 
-        Task<T> AddAsync(T entity);
-        Task<List<T>> AddRangeAsync(List<T> entities);
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<List<TEntity>> AddRangeAsync(List<TEntity> entities);
 
-        Task UpdateAsync(T entity);
+        Task UpdateAsync(TEntity entity);
 
-        Task DeleteAsync(T entity);
-        Task DeleteRangeAsync(List<T> entities);
-        Task DeleteRangeAsync(IQueryable<T> entities);
-        Task DeleteRangeAsync(ICollection<T> entities);
+        Task DeleteAsync(TEntity entity);
+        Task DeleteRangeAsync(List<TEntity> entities);
+        Task DeleteRangeAsync(IQueryable<TEntity> entities);
+        Task DeleteRangeAsync(ICollection<TEntity> entities);
     }
 }

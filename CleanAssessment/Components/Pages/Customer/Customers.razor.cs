@@ -115,7 +115,7 @@ namespace CleanAssessment.Components.Pages.Customer
         private async Task InvokeDeleteModal()
         {
             var current = _grid.SelectedItem;
-            var dialog = await ConfirmModal.Dialog(_dialogService, "Delete Customer", $"Are you sure you want to delete {current.FullName} ?", "Delete"
+            var dialog = await ConfirmModal.GetDialog(_dialogService, "Delete Customer", $"Are you sure you want to delete {current.FullName} ?", "Delete"
                 , icon: Icons.Material.Filled.Delete
                 , buttonColor: Color.Error
                 );

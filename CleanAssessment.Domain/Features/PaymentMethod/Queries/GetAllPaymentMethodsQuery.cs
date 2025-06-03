@@ -24,8 +24,8 @@ namespace CleanAssessment.Domain.Features.PaymentMethod.Queries
 
     internal class GetAllPaymentMethodsHandler : IRequestHandler<GetAllPaymentMethodsQuery, Result<List<PaymentMethodResponse>>>
     {
-        private readonly IUnitOfWork<int> _unitOfWork;
-        public GetAllPaymentMethodsHandler(IUnitOfWork<int> unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+        public GetAllPaymentMethodsHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

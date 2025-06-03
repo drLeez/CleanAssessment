@@ -1,9 +1,11 @@
 ﻿@using System.Diagnostics
 @using CleanAssessment.Helpers
+@using CleanAssessment.Shared.Extensions
 @inherits LayoutComponentBase
 
 @inject IJSRuntime _jsRuntime;
 @inject ICookieHelper _cookieHelper;
+@inject IWebHostEnvironment _webHostEnvironment;
 
 @* Required *@
 <MudThemeProvider @bind-IsDarkMode="_darkMode" Theme="@AssessmentTheme" />
@@ -30,7 +32,7 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
         <MudDrawerHeader Class="prim-header">
-            <MudText Typo="Typo.h5" Style="color: white" Class="mt-1">Assessment</MudText>
+            <MudText Typo="Typo.h5" Style="color: white" Class="mt-1">@($"Assessment ({(_webHostEnvironment.IsLocal() ? "LOCAL" : "DEPLOYED")})")</MudText>
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>

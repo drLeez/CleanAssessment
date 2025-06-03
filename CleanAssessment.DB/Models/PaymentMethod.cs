@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using CleanAssessment.Shared.Bases;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace CleanAssessment.DB.Models
 {    
     [Serializable]
-    public class PaymentMethod
+    public record PaymentMethod : Entity<int>
     {
         [Key]
         public int PaymentMethodId { get; set; }

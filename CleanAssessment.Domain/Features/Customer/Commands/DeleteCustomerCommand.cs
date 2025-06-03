@@ -21,8 +21,8 @@ namespace CleanAssessment.Domain.Features.Customer.Commands
     }
     internal class DeleteCustomerHandler : IRequestHandler<DeleteCustomerCommand, Result<int>>
     {
-        private readonly IUnitOfWork<int> _unitOfWork;
-        public DeleteCustomerHandler(IUnitOfWork<int> unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+        public DeleteCustomerHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -34,14 +34,14 @@ namespace CleanAssessment.Domain.Features.Customer.Commands
                 {
                     return await Result<int>.FailAsync($"Invalid request");
                 }
-                var customer = _unitOfWork.Repository<DB.Models.Customer>().Entities.SingleOrDefault(
+                var customer = _unitOfWork.CustomerRepository.Entities.SingleOrDefault(
                     x => x.CustomerId == request.Customer.CustomerId
                 );
                 if (customer == null)
                 {
                     return await Result<int>.FailAsync($"Could not find Customer to delete: {request.Customer.FullName}");
                 }
-                await _unitOfWork.Repository<DB.Models.Customer>().DeleteAsync(customer);
+                await _unitOfWork.CustomerRepository.DeleteAsync(customer);
                 await _unitOfWork.Commit(cancellationToken);
 
                 return await Result<int>.SuccessAsync(0, $"{request.Customer.FullName} has been deleted");
